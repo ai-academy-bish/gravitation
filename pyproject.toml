@@ -1,0 +1,77 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gravitation"
+version = "0.1.0"
+description = "Newtonian N-body gravity simulator with hand-written integrators and Manim visualisation, made for teaching."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Simon", email = "simonlobgromov@gmail.com" }]
+keywords = ["n-body", "gravity", "physics", "simulation", "manim", "education", "numerical-methods"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Astronomy",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+dependencies = [
+    "numpy>=2.1",
+    "pyyaml>=6.0",
+    "matplotlib>=3.9",
+    "tqdm>=4.66",
+    # HTTPS to JPL Horizons through the OS certificate store (uv-managed
+    # Python does not see the system certificates on its own).
+    "truststore>=0.10",
+]
+
+[project.optional-dependencies]
+# Manim Community Edition: Cairo (CPU) and OpenGL renderers.
+ce = ["manim>=0.22"]
+# 3Blue1Brown's own ManimGL: GPU rendering through OpenGL. The source is
+# pinned to a git commit in [tool.uv.sources] below.
+gl = ["manimgl>=1.7.2"]
+
+[project.scripts]
+gravitation = "gravitation.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8.3", "ruff>=0.8"]
+
+[tool.uv]
+# uv-managed CPython ships its own headers, so pycairo builds the same way on
+# every machine without python3-dev / python3-devel system packages.
+python-preference = "only-managed"
+
+[tool.uv.sources]
+# The last PyPI release of ManimGL (1.7.2, Dec 2024) imports pkg_resources,
+# which current setuptools no longer ships; master is maintained and fixed.
+manimgl = { git = "https://github.com/3b1b/manim.git", rev = "fafa083a4fb274bba9cabde0b6e2f50ba6da0622" }
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gravitation"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "NPY", "SIM", "RUF"]
+ignore = [
+    "E501",   # code is wrapped by `ruff format`; LaTeX formulas in docstrings may run long
+    "RUF001", # Greek letters and maths symbols in strings are intentional
+    "RUF002", # ... and in docstrings
+    "RUF003", # ... and in comments
+]

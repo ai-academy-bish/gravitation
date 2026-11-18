@@ -1,0 +1,62 @@
+# The first example from the original notebook ("agents_1"): four small
+# bodies of 10⁸–10⁹ kg a few metres apart, in SI units. Gravity is weak at
+# this scale, so everything is slow: one orbit takes almost two minutes.
+#
+# The notebook integrated it with dt = 100 s, but the blue body orbits the
+# red one in about 105 s, so it took roughly one step per orbit and the
+# result was meaningless. Here dt = 0.002 s, about 50 000 steps per orbit.
+#
+# Green starts at rest and falls straight onto Red (free-fall time ≈ 62 s):
+# a head-on collision, where point-mass gravity diverges. A softening length
+# of 0.3 m, roughly the bodies' size in the notebook, keeps it finite. The
+# energy error peaks at ~3e-5 during the pass and returns to ~1e-9 afterwards,
+# typical of a time-reversible symplectic method.
+
+name: Four Bodies
+description: The notebook's first example, small masses metres apart, with a sane time step.
+
+units:
+  length: m
+  time: s
+  mass: kg
+
+simulation:
+  duration: 900                    # 15 minutes, about 8 orbits of Blue
+  dt: 0.002
+  integrator: verlet
+  softening: 0.3                   # metres
+  barycentric: true
+
+render:
+  duration: 20
+  scale: 0.25                      # scene units per metre: frames the bound group;
+                                   # Yellow is flung out of the frame after the close pass
+  trail: 3
+  axes: true
+  camera: {phi: 65, theta: -30, zoom: 1.0, rotation: 4}
+
+bodies:
+  - name: Red
+    mass: 7 * 10**9
+    position: [2, 2, 0]
+    velocity: [0, 0, 0]
+    radius: 0.14
+    color: red
+  - name: Blue
+    mass: 8 * 10**8
+    position: [7, 2, 0]
+    velocity: [0, 0.3, 0.07]
+    radius: 0.1
+    color: dodgerblue
+  - name: Yellow
+    mass: 1 * 10**8
+    position: [5, 5, 5]
+    velocity: [-0.1, 0, 0.1]
+    radius: 0.08
+    color: yellow
+  - name: Green
+    mass: 1 * 10**9
+    position: [0, 8, 10]
+    velocity: [0, 0, 0]
+    radius: 0.12
+    color: limegreen

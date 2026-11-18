@@ -1,0 +1,74 @@
+# The "Gargantua" scenario from the original 2024 notebook: the inner Solar
+# System in a planetary alignment, with a 20-solar-mass black hole parked 10 au
+# above the ecliptic. Numbers are the notebook's own, in SI units, written as
+# expressions the way they were there.
+#
+# The black hole pulls the whole system towards it (the Sun falls about
+# 4 au in a year), and its tidal field increasingly distorts the orbits.
+# The camera stays where the Sun started, zoomed out far enough to show both.
+
+name: Gargantua Flyby
+description: Inner Solar System falling towards a 20-solar-mass black hole 10 au away.
+
+units: si
+
+simulation:
+  duration: 35e6                   # seconds, about 405 days, as in the notebook
+  dt: 100                          # the notebook's step; Verlet makes it accurate
+  integrator: verlet
+  barycentric: false               # keep the notebook's frame: everything starts at rest
+
+render:
+  duration: 20
+  center: origin
+  scale: 0.30
+  scale_unit: au
+  trail: 4
+  camera: {phi: 78, theta: -40, zoom: 1.0, rotation: 3}
+
+bodies:
+  - name: Sun
+    mass: 1.98892 * 10**30
+    position: [0, 0, 0]
+    velocity: [0, 0, 0]
+    radius: 0.09
+    color: "#fdb813"
+    glow: true
+  - name: Mercury
+    mass: 3.3011 * 10**23
+    position: [57.9 * 10**9, 0, 0]
+    velocity: [0, 47.36 * 1000, 0]
+    radius: 0.03
+    color: "#a8a29e"
+  - name: Venus
+    mass: 4.8675 * 10**24
+    position: [108.2 * 10**9, 0, 0]
+    velocity: [0, 35.02 * 1000, 0]
+    radius: 0.035
+    color: "#e9c46a"
+  - name: Earth
+    mass: 5.972 * 10**24
+    position: [149.6 * 10**9, 0, 0]
+    velocity: [0, 107 * 10**6 / 3600, 0]            # 107 000 km/h
+    radius: 0.04
+    color: "#3a86ff"
+  - name: Moon
+    mass: 7.36 * 10**22
+    position: [384400 * 1000 + 149.6 * 10**9, 0, 0]
+    velocity: [0, 1023 + 107 * 10**6 / 3600, 0]
+    radius: 0.02
+    color: "#d9d9d9"
+    exaggerate: {around: Earth, factor: 60}
+  - name: Mars
+    mass: 6.4171 * 10**23
+    position: [227.9 * 10**9, 0, 0]
+    velocity: [0, 24.13 * 1000, 0]
+    radius: 0.03
+    color: "#e76f51"
+  - name: Gargantua
+    mass: 20 * 1.98892 * 10**30
+    position: [20 * 10**9, 0, 10 * 149.6 * 10**9]
+    velocity: [0, 0, 0]
+    radius: 0.12
+    color: "#050505"
+    glow: "#ff9e40"                 # accretion-disk orange halo around a black sphere

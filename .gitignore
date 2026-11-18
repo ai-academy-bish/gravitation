@@ -1,0 +1,188 @@
+# =============================================================================
+#  gravitation — project outputs
+# =============================================================================
+output/
+media/
+# Manim CE / ManimGL caches and default output folders (anchored to the repo
+# root so that e.g. .docs/images/ is still tracked)
+__manim_cache__/
+partial_movie_files/
+/videos/
+/images/
+/Tex/
+/texts/
+/custom_config.yml
+/manim.cfg
+# Rendered videos and simulation dumps outside output/
+*.mp4
+*.mov
+*.webm
+*.npz
+
+# =============================================================================
+#  Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+pip-wheel-metadata/
+
+# Virtual environments (uv, venv, virtualenv, conda, pyenv)
+.venv/
+venv/
+env/
+ENV/
+.env/
+.conda/
+.direnv/
+# uv.lock is intentionally NOT ignored: commit it for reproducible installs.
+
+# Test, coverage, type-checker and linter caches
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.hypothesis/
+.cache/
+nosetests.xml
+*.cover
+*.py,cover
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+cython_debug/
+.benchmarks/
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+profile_default/
+ipython_config.py
+
+# Profiling
+*.prof
+*.lprof
+*.pstats
+
+# Secrets and local settings
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+secrets.*
+
+# Logs and temp files
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
+
+# =============================================================================
+#  macOS
+# =============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+*.icloud
+
+# =============================================================================
+#  Linux
+# =============================================================================
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+nohup.out
+
+# =============================================================================
+#  Windows
+# =============================================================================
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# =============================================================================
+#  Editors and IDEs
+# =============================================================================
+.vscode/*
+!.vscode/extensions.json
+.history/
+*.code-workspace
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+*.swp
+*.swo
+*.swn
+.*.sw?
+Session.vim
+.netrwhist
+tags
+[._]*.un~
+*.sublime-project
+*.sublime-workspace
+.spyderproject
+.spyproject
+.ropeproject
+.fleet/
+.zed/
+.claude/settings.local.json

@@ -1,0 +1,109 @@
+# =============================================================================
+#  Binary star with a circumbinary planet and a comet
+#
+#  This file doubles as the REFERENCE for writing your own systems: every
+#  option is listed and explained. Copy it, change the bodies, run
+#      make render CONFIG=configs/my_system.yaml
+#
+#  Numbers may be arithmetic expressions: 1.5e8 / 86400, 7 * 10**9, 2 * pi.
+#  Hex colours must be quoted ("#ff8800"): '#' starts a YAML comment.
+# =============================================================================
+
+name: Binary Star                      # shown in the video's corner
+description: >-
+  Two Sun-like stars on circular orbits 0.5 au apart, a Jupiter-mass planet
+  circling both of them, and an inclined comet on an eccentric orbit.
+
+# -----------------------------------------------------------------------------
+# units — how the numbers below are written. Internally everything is SI.
+#   length:   m | km | au | ly | pc | earth_radius | solar_radius
+#   time:     s | min | h | day | yr            (also: days, years, ...)
+#   mass:     kg | earth_mass | jupiter_mass | solar_mass
+#   velocity: optional "<length>/<time>", default is length/time (au/day here)
+# or simply `units: si` (the default) or `units: nbody` (G = 1, dimensionless).
+# -----------------------------------------------------------------------------
+units:
+  length: au
+  time: day
+  mass: solar_mass
+  velocity: km/s
+
+# -----------------------------------------------------------------------------
+# simulation — the numerical integration
+# -----------------------------------------------------------------------------
+simulation:
+  duration: 2200            # simulated time, in `time` units (≈ 2 planet orbits)
+  dt: 0.05                  # largest integration step; ~1/2000 of the binary period
+  integrator: yoshida4      # euler | euler_cromer | verlet | rk4 | yoshida4
+  softening: 0              # ε in `length` units; > 0 tames close encounters
+  barycentric: true         # move to the centre-of-mass frame first (no drift)
+  samples: auto             # stored snapshots; auto = 60 per second of video
+
+# -----------------------------------------------------------------------------
+# render — how the video looks (does not affect the physics)
+# -----------------------------------------------------------------------------
+render:
+  duration: 20              # seconds of video
+  center: barycenter        # barycenter | origin | <body name> (camera follows it)
+  scale: auto               # scene units per scale_unit; auto fits the frame (8 units tall)
+  # scale_unit: au          # unit for a numeric `scale` (default: units.length)
+  trail: 6                  # trail length in seconds of video; 0/off = none; full = whole path
+  trail_width: 2.0
+  trail_opacity: 0.8
+  background: "#0b0d17"     # CSS name or hex
+  hud: true                 # title, clock and scale in the corners
+  axes: false               # faint x/y/z axes through the centre
+  camera:
+    phi: 62                 # polar angle from +z, degrees: 0 = top view, 90 = edge-on
+    theta: -35              # azimuth, degrees
+    zoom: 1.2
+    rotation: 3             # slow spin, degrees per second of video
+
+# -----------------------------------------------------------------------------
+# bodies — any number. Per body:
+#   name      unique label
+#   mass | gm exactly one: mass in `mass` units, or gm = G·m in length³/time²
+#   position  [x, y, z] in `length` units ([x, y] means z = 0)
+#   velocity  [vx, vy, vz] in `velocity` units
+#   radius    visual radius in scene units (default 0.08); not physical
+#   color     CSS/HTML name (see `make colors`), "#rrggbb", "#rgb" or [r, g, b]
+#   glow      true (halo in body colour), a colour, or false
+#   exaggerate {around: <body>, factor: k}: draw the orbit around <body> k
+#             times larger; visual only (used for the Moon)
+# -----------------------------------------------------------------------------
+bodies:
+  # Circular binary: separation a = 0.5 au, total mass M = 1.8, so the
+  # relative speed is sqrt(G·M/a) = 56.51 km/s, shared inversely to mass.
+  - name: Star A
+    mass: 1.0
+    position: [-0.5 * 0.8 / 1.8, 0, 0]
+    velocity: [0, -56.51 * 0.8 / 1.8, 0]
+    radius: 0.1
+    color: gold
+    glow: true
+
+  - name: Star B
+    mass: 0.8
+    position: [0.5 * 1.0 / 1.8, 0, 0]
+    velocity: [0, 56.51 * 1.0 / 1.8, 0]
+    radius: 0.085
+    color: "#ff7b54"
+    glow: true
+
+  # Circular orbit around the pair: v = sqrt(G·M/r) at r = 2.5 au.
+  - name: Planet
+    mass: 9.54e-4                 # one Jupiter mass
+    position: [2.5, 0, 0]
+    velocity: [0, 25.27, 0]
+    radius: 0.06
+    color: deepskyblue
+
+  # Slower than circular at 4.5 au, so it falls inwards on an ellipse tilted
+  # 20° out of the plane: perihelion ~1.5 au, safely outside the binary.
+  # (Starting slower or closer, a pass near the stars flings it out of the system.)
+  - name: Comet
+    mass: 1e-12
+    position: [-4.5, 0, 0]
+    velocity: [0, -12.5, 4.5]
+    radius: 0.04
+    color: [200, 230, 255]
